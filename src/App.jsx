@@ -6,8 +6,10 @@ import ThemeObjForStyledComponent from "./assets/theme";
 import { Provider } from "react-redux";
 import Store from "./redux/store";
 import { SkeletonTheme } from 'react-loading-skeleton'
+import Mainpage from "./views/Mainpage/Mainpage";
+import AppWrapper from "./components/AppWrapper/AppWrapper";
 // route components
-const Homepage = React.lazy(() => import("./views/Homepage/Homepage"));
+const Homepage = React.lazy(() => import("./views/Heropage/Heropage"));
 
 const App = () => {
   return (
@@ -18,7 +20,8 @@ const App = () => {
             <Router>
               <React.Suspense fallback={<Loader />}>
                 <Switch>
-                  <Route path="/" exact component={Homepage} />
+                  <Route path="/" exact component={Mainpage} />
+                  <Route path="/hero" exact component={Homepage} />
                 </Switch>
               </React.Suspense>
             </Router>
@@ -30,8 +33,3 @@ const App = () => {
 };
 
 export default App;
-
-// styling
-const AppWrapper = styled.div`
-  height: 100vh;
-`;

@@ -9,12 +9,12 @@ const SuperHeroAffections = (props) => {
       <KeyValueDiv
         className="my-2"
         name="Group Affiliation"
-        value={connections?.groupAffiliation?.split(";")}
+        value={connections?.groupAffiliation?.split(";" && ",")}
       />
       <KeyValueDiv
         className="my-2"
         name="Relatives"
-        value={connections?.relatives?.split(";")}
+        value={connections?.relatives?.split(";" && ",")}
       />
     </div>
   );

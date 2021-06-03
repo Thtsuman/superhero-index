@@ -2,60 +2,73 @@ import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import styled from "styled-components";
 import images from "../../assets/images";
-import BigScreenNoAllowedDiv from "../../components/BigScreenNoAllowedDiv/BigScreenNoAllowedDiv";
 import SearchComponent from "../../components/SearchComponent/SearchComponent";
 import SuperHeroCard from "../../components/SuperHeroCard/SuperHeroCard";
-import { getInitialHero } from "../../redux/states/Hero/heroActions";
+import {
+  getHeroWithId,
+  getInitialHero,
+  toggleIsLoading,
+} from "../../redux/states/Hero/heroActions";
 
-const Homepage = () => {
+const Heropage = (props) => {
   const reduxDispatch = useDispatch();
   const currentHeroObj = useSelector((state) => state.hero?.currentSuperHero);
+  const isLoading = useSelector((state) => state.hero?.isLoading);
 
   const [data, setData] = useState({});
-  const [isLoading, setIsLoading] = useState(true);
+  // const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
-    reduxDispatch(getInitialHero());
+    // setIsLoading(true);
+    reduxDispatch(toggleIsLoading(true));
+    const id = props.location?.state?.id;
+    if (id) {
+      reduxDispatch(getHeroWithId(id));
+    } else {
+      reduxDispatch(getInitialHero());
+    }
   }, []);
 
   useEffect(() => {
     if (currentHeroObj?.id) {
       setData(currentHeroObj);
-      setIsLoading(false);
+      reduxDispatch(toggleIsLoading(false));
     }
   }, [currentHeroObj]);
 
   return (
-    <HomepageWrapper>
-      <MobileWrapper>
-        <SearchComponent />
-        <DescriptionWrapper
-          id="description-wrapper"
-          className="glassmorphism-wrapper"
-        >
-          <SuperHeroCard isLoading={isLoading} data={data} />
-        </DescriptionWrapper>
-        <ImageWrapper>
-          <OpacityWrapper className="opacity-container"></OpacityWrapper>
-          <SuperHeroImg
-            onError={images.defaultImg}
-            src={data?.images?.md || images.defaultImg}
-            alt=""
-          />
-        </ImageWrapper>
-      </MobileWrapper>
-
-      <BigScreenNoAllowedDiv />
-    </HomepageWrapper>
+    <HeropageWrapper>
+      <SearchComponent />
+      <DescriptionWrapper
+        id="description-wrapper"
+        className="glassmorphism-wrapper"
+      >
+        <SuperHeroCard isLoading={isLoading} data={data} />
+      </DescriptionWrapper>
+      <ImageWrapper>
+        <OpacityWrapper className="opacity-container"></OpacityWrapper>
+        <SuperHeroImg
+          onError={() => images.defaultImg}
+          src={
+            isLoading
+              ? images.defaultImg
+              : data?.images?.md || images.defaultImg
+          }
+          alt=""
+        />
+      </ImageWrapper>
+    </HeropageWrapper>
   );
 };
 
-export default Homepage;
+export default Heropage;
 
 // styling
-const HomepageWrapper = styled.div`
-  position: relative;
+
+const HeropageWrapper = styled.div`
+  position: absolute;
+  width: 100%;
+  bottom: 0;
   display: flex;
   align-items: flex-end;
   justify-content: flex-end;
@@ -77,19 +90,12 @@ const DescriptionWrapper = styled.div`
   position: relative;
   width: 100%;
   bottom: 0;
-  z-index: 1000;
+  z-index: 99;
   transition: opacity 0.3s ease-in-out;
   // background: var(--light-color);
   border-radius: 10px;
   color: ${(props) => props.theme.colors.lightColor};
 }
-`;
-
-const MobileWrapper = styled.div`
-width: 100%;
-@media (min-width: ${(props) => props.theme.breakpoints.mobile}) {
-  display: none;
-
 `;
 
 const SuperHeroImg = styled.img`
