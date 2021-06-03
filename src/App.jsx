@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { ThemeProvider } from "styled-components";
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
+import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import Loader from "./views/Loader/Loader";
 import ThemeObjForStyledComponent from "./assets/theme";
 import { Provider } from "react-redux";

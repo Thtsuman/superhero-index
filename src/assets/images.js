@@ -1,6 +1,6 @@
 const images = {
-    defaultImg: '/images/defaultImg.jpg',
-    noImgScreenImg: '/images/noScreen.png'
+    defaultImg: './images/defaultImg.jpg',
+    noImgScreenImg: './images/noScreen.png'
 }
 
 export default images
